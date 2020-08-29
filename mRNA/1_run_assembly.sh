@@ -15,7 +15,7 @@ mv ./IonXpressRNA_008_R_2017_03_29_11_06_57_user_KKK-325-motoki_RNA_sample.fastq
 
 SAMPLE=("insitu_4_1_2" "insitu_8_3" "onboard_2_1_2" "onboard_10_1_2")
 
-### Quarity filtering
+### Quality filtering
 for i in `seq 0 3`; do
 
 # ERROR CORRECTION - karect-1.0 -
@@ -39,7 +39,7 @@ done
 ### Assemble - TRINITY - >300bp
 cd $DIR
 export TRINITY_HOME=$HOME/biotools/trinityrnaseq-Trinity-v2.3.2; \
- export PATH=$PATH:$HOME/biotools/samtools-1.3.1:$HOME/biotools/bowtie2-2.2.9:$HOME/biotools/samtools-bcftools-htslib-1.0_x64-linux/bin:$HOME/biotools/RSEM-1.2.30:$HOME/biotools//bowtie-1.1.2
+    export PATH=$PATH:$HOME/biotools/samtools-1.3.1:$HOME/biotools/bowtie2-2.2.9:$HOME/biotools/samtools-bcftools-htslib-1.0_x64-linux/bin:$HOME/biotools/RSEM-1.2.30:$HOME/biotools//bowtie-1.1.2
 
 $TRINITY_HOME/Trinity --seqType fq \
     --single $HOME/prinseq/*_karect26_trimmed.fastq \
@@ -48,7 +48,7 @@ $TRINITY_HOME/Trinity --seqType fq \
     --output trinity_karect_26_300
 
 $HOME/biotools/gc_contentSkew.pl -if $HOME/trinity_karect_26_300/Trinity.fasta  -p gc; \
- cut -f1,2,3,4 outgc | awk '{FS="\t"}$2 > 200{print}' | sort -rnk2 | perl -F'\t' -anle 'BEGIN{$info={}; $info->{max}= 0}; $info->{count}++; $info->{sum}+= $F[1]; $info->{n50}->{$F[1]}= $info->{sum}; $info->{max}= $F[1] if($info->{max} < $F[1]); push @{$info->{len}}, $F[1]; $info->{GC}+= $F[3]; END{print "COUNT: $info->{count}"; print "SUM: $info->{sum}"; print "MAX: $info->{max}"; @values=grep{$info->{n50}->{$_} > $info->{sum}/2}@{$info->{len}}; print "N50: $values[0]"; print "@{$info->{len}}[0..4]"; print "GC: ".($info->{GC}/$info->{count})}'
+    cut -f1,2,3,4 outgc | awk '{FS="\t"}$2 > 200{print}' | sort -rnk2 | perl -F'\t' -anle 'BEGIN{$info={}; $info->{max}= 0}; $info->{count}++; $info->{sum}+= $F[1]; $info->{n50}->{$F[1]}= $info->{sum}; $info->{max}= $F[1] if($info->{max} < $F[1]); push @{$info->{len}}, $F[1]; $info->{GC}+= $F[3]; END{print "COUNT: $info->{count}"; print "SUM: $info->{sum}"; print "MAX: $info->{max}"; @values=grep{$info->{n50}->{$_} > $info->{sum}/2}@{$info->{len}}; print "N50: $values[0]"; print "@{$info->{len}}[0..4]"; print "GC: ".($info->{GC}/$info->{count})}'
 
 
 ### CDS - Transdecoder - >100AA
@@ -64,7 +64,7 @@ $HOME/biotools/TransDecoder-2.0.1/TransDecoder.Predict -t $DIR/trinity_karect_26
 for i in `seq 0 3`; do
 
 export TRINITY_HOME=$HOME/biotools/trinityrnaseq-Trinity-v2.3.2; \
- export PATH=$PATH:$HOME/biotools/samtools-1.3.1:$HOME/biotools/bowtie2-2.2.9:/$HOME/biotools/samtools-bcftools-htslib-1.0_x64-linux/bin:$HOME/biotools/RSEM-1.2.30:$HOME/biotools/bowtie-1.1.2
+    export PATH=$PATH:$HOME/biotools/samtools-1.3.1:$HOME/biotools/bowtie2-2.2.9:/$HOME/biotools/samtools-bcftools-htslib-1.0_x64-linux/bin:$HOME/biotools/RSEM-1.2.30:$HOME/biotools/bowtie-1.1.2
 
 $TRINITY_HOME/util/align_and_estimate_abundance.pl \
     --seqType fq \
